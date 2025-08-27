@@ -25,7 +25,7 @@ const Calendar = () => {
     const days = [];
 
     // Add days from previous month
-    const prevMonth = new Date(year, month - 1, 0);
+    const prevMonth = new Date(year, month, 0);
     const prevMonthDays = prevMonth?.getDate();
     for (let i = startingDayOfWeek - 1; i >= 0; i--) {
       days?.push({
@@ -44,8 +44,8 @@ const Calendar = () => {
       });
     }
 
-    // Add days from next month to fill the grid
-    const totalCells = 42; // 6 rows × 7 days
+    // Add days from next month to fill the grid to exactly 5 rows (35 days)
+    const totalCells = 35; // 5 rows × 7 days
     const remainingCells = totalCells - days?.length;
     for (let day = 1; day <= remainingCells; day++) {
       days?.push({
@@ -55,6 +55,7 @@ const Calendar = () => {
       });
     }
 
+    // Slice the array to ensure it's exactly 35 days long.
     return days?.slice(0, totalCells);
   }, []);
 
@@ -170,7 +171,7 @@ const Calendar = () => {
   }, [calendarDays]);
 
   return (
-    <div className="w-full bg-global-5 border border-global-2 rounded-[12px] p-[14px]">
+    <div className="w-full bg-global-5 rounded-[12px] p-[14px]">
       {/* Calendar Header */}
       <div className="flex flex-row justify-between items-center px-[14px] lg:px-[24px] mb-[14px]">
         <h3 className="text-[16px] font-plus-jakarta font-bold leading-[21px] text-left text-global-1">
@@ -190,7 +191,7 @@ const Calendar = () => {
           RESET
         </Button>
       </div>
-      <div className="w-full h-[1px] bg-global-3 mb-[18px]"></div>
+      {/* <div className="w-full h-[1px] bg-global-3 mb-[18px]"></div> */}
       {/* Month/Year Navigation */}
       <div className="flex flex-row justify-between items-center px-[24px] mb-[22px]">
         <div className="flex flex-row justify-start items-center flex-1">
@@ -206,14 +207,14 @@ const Calendar = () => {
             <img 
               src="/images/img_arrow_up_blue_gray_900.svg" 
               alt="previous" 
-              className="w-[24px] h-[24px] transform rotate-180"
+              className="w-[24px] h-[24px] "
             />
           </button>
           <button onClick={() => navigateMonth(1)} className="cursor-pointer">
             <img 
               src="/images/img_arrow_up_blue_gray_900.svg" 
               alt="next" 
-              className="w-[24px] h-[24px]"
+              className="w-[24px] h-[24px] transform rotate-180"
             />
           </button>
         </div>
@@ -221,7 +222,7 @@ const Calendar = () => {
       {/* Calendar Grid */}
       <div className="flex flex-col justify-start items-center px-[36px] lg:px-[40px] pb-[20px]">
         {/* Week Days Header */}
-        <div className="flex flex-row justify-between items-center w-full mb-[22px]">
+        <div className="flex flex-row gap-[24px] w-full mb-[22px]">
           {weekDays?.map((day, index) => (
             <p key={index} className="text-[16px] font-plus-jakarta font-normal leading-[21px] text-left text-global-6 w-[32px] text-center">
               {day}
@@ -237,14 +238,14 @@ const Calendar = () => {
             const hasSelectionInWeek = firstInRangeIndex !== -1;
 
             const baseWidth = 32; // w-[32px]
-            const gapWidth = 8; // gap-[8px]
+            const gapWidth = 22; // gap-[8px]
 
             // Calculate the start and width for the range div
             const startX = hasSelectionInWeek ? firstInRangeIndex * (baseWidth + gapWidth) : 0;
             const rangeWidth = hasSelectionInWeek ? (lastInRangeIndex - firstInRangeIndex) * (baseWidth + gapWidth) + baseWidth : 0;
             
             return (
-              <div key={weekIndex} className="flex flex-row gap-[8px] w-full relative">
+              <div key={weekIndex} className="flex flex-row gap-[22px] w-full relative">
                 {/* Single div for the background and border */}
                 {hasSelectionInWeek && (
                   <div 

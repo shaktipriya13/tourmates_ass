@@ -1,10 +1,10 @@
-# React + Vite + Tailwind CSS Project
+# Tourmates Assignment Project
 
 A modern React-based project utilizing the latest frontend technologies and tools for building responsive web applications.
 
 ## 🚀 Features
 
-- **React 18** - React version with improved rendering and concurrent features
+- **React 19** - React version with improved rendering and concurrent features
 - **Vite** - Lightning-fast build tool and development server
 - **TailwindCSS** - Utility-first CSS framework with extensive customization
 - **React Router** - Declarative routing for React applications
@@ -93,10 +93,3 @@ Build the application for production:
 npm run build
 ```
 
-## 🙏 Acknowledgments
-
-- Built with [Rocket.new](https://rocket.new)
-- Powered by React and Vite
-- Styled with Tailwind CSS
-
-Built with ❤️ on Rocket.new

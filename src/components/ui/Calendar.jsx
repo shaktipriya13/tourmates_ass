@@ -79,7 +79,7 @@ const Calendar = () => {
     return dateTime >= minTime && dateTime <= maxTime;
   }, [selectedStartDate, selectedEndDate]);
 
-  // Check if a date is start or end date
+  // Check if a date is a start or end date
   const isDateEdge = useCallback((date) => {
     if (!selectedStartDate) return false;
     
@@ -176,7 +176,7 @@ const Calendar = () => {
         <h3 className="text-[16px] font-plus-jakarta font-bold leading-[21px] text-left text-global-1">
           Calendar
         </h3>
-        {/* <Button
+        <Button
           variant="outline"
           size="small"
           leftImage={{
@@ -184,25 +184,11 @@ const Calendar = () => {
             width: 24,
             height: 24
           }}
-          className="text-[12px] font-plus-jakarta font-normal leading-[16px] tracking-[2px] text-center text-global-1"
+          className="flex items-center gap-[8px] text-[12px] font-plus-jakarta font-normal leading-[16px] tracking-[2px] text-global-1"
           onClick={handleReset}
         >
           RESET
-        </Button> */}
-        <Button
-  variant="outline"
-  size="small"
-  leftImage={{
-    src: "/images/img_rotateleft.svg",
-    width: 24,
-    height: 24
-  }}
-  className="flex items-center gap-[8px] text-[12px] font-plus-jakarta font-normal leading-[16px] tracking-[2px] text-global-1"
-  onClick={handleReset}
->
-  RESET
-</Button>
-
+        </Button>
       </div>
       <div className="w-full h-[1px] bg-global-3 mb-[18px]"></div>
       {/* Month/Year Navigation */}
@@ -245,43 +231,70 @@ const Calendar = () => {
 
         {/* Calendar Weeks */}
         <div className="flex flex-col gap-[12px] w-full">
-          {weeks?.map((week, weekIndex) => (
-            <div key={weekIndex} className="flex flex-row justify-between items-center w-full">
-              {week?.map((dayObj, dayIndex) => {
-                const isSelected = isDateSelected(dayObj?.date);
-                const isEdge = isDateEdge(dayObj?.date);
-                const isInRange = isSelected && !isEdge;
+          {weeks?.map((week, weekIndex) => {
+            const firstInRangeIndex = week.findIndex(day => isDateSelected(day?.date));
+            const lastInRangeIndex = week.findLastIndex(day => isDateSelected(day?.date));
+            const hasSelectionInWeek = firstInRangeIndex !== -1;
+
+            const baseWidth = 32; // w-[32px]
+            const gapWidth = 8; // gap-[8px]
+
+            // Calculate the start and width for the range div
+            const startX = hasSelectionInWeek ? firstInRangeIndex * (baseWidth + gapWidth) : 0;
+            const rangeWidth = hasSelectionInWeek ? (lastInRangeIndex - firstInRangeIndex) * (baseWidth + gapWidth) + baseWidth : 0;
+            
+            return (
+              <div key={weekIndex} className="flex flex-row gap-[8px] w-full relative">
+                {/* Single div for the background and border */}
+                {hasSelectionInWeek && (
+                  <div 
+                    className={`
+                      absolute inset-y-0 bg-global-2 border border-dashed border-[#919ef3] z-0
+                      ${isDateEdge(week[firstInRangeIndex].date) && firstInRangeIndex === 0 ? 'border-l-0' : ''}
+                      ${isDateEdge(week[lastInRangeIndex].date) && lastInRangeIndex === 6 ? 'border-r-0' : ''}
+                    `}
+                    style={{
+                      left: `${startX}px`,
+                      width: `${rangeWidth}px`,
+                      borderRadius: '20px',
+                      borderTopLeftRadius: firstInRangeIndex === 0 ? '20px' : '0',
+                      borderBottomLeftRadius: firstInRangeIndex === 0 ? '20px' : '0',
+                      borderTopRightRadius: lastInRangeIndex === 6 ? '20px' : '0',
+                      borderBottomRightRadius: lastInRangeIndex === 6 ? '20px' : '0',
+                    }}
+                  ></div>
+                )}
                 
-                return (
-                  <div key={dayIndex} className="relative w-[32px] h-[32px] flex items-center justify-center">
-                    {isInRange && (
-                      <div className="absolute inset-0 bg-global-2 border-t border-b border-[#919ef3]"></div>
-                    )}
-                    
-
-                    <button
-                      onClick={() => handleDateClick(dayObj?.date, dayObj?.isCurrentMonth)}
-                      className={`
-                        w-[32px] h-[32px] flex items-center justify-center rounded-[20px] text-[16px] font-plus-jakarta font-medium leading-[21px] text-center transition-all duration-200 relative z-10
-                        ${dayObj?.isCurrentMonth 
-                          ? (isEdge 
-                              ? 'bg-button-2 text-button-2 hover:bg-[#5a4df0]' 
-                              : 'text-global-2 hover:bg-gray-100'
-                            )
-                          : 'text-global-10 cursor-default'
-                        }
-                      `}
-                      disabled={!dayObj?.isCurrentMonth}
-                    >
-                      {dayObj?.day}
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          ))}
+                {week?.map((dayObj, dayIndex) => {
+                  const isSelected = isDateSelected(dayObj?.date);
+                  const isEdge = isDateEdge(dayObj?.date);
+                  
+                  return (
+                    <div key={dayIndex} className="relative w-[32px] h-[32px] flex items-center justify-center">
+                      <button
+                        onClick={() => handleDateClick(dayObj?.date, dayObj?.isCurrentMonth)}
+                        className={`
+                          w-[32px] h-[32px] flex items-center justify-center rounded-[20px] text-[16px] font-plus-jakarta font-medium leading-[21px] text-center transition-all duration-200 relative z-10
+                          ${dayObj?.isCurrentMonth 
+                            ? (isEdge 
+                                ? 'bg-button-2 text-button-2 hover:bg-[#5a4df0]' 
+                                : isSelected ? 'text-global-2' : 'text-global-2 hover:bg-gray-100'
+                              )
+                            : 'text-global-10 cursor-default'
+                          }
+                        `}
+                        disabled={!dayObj?.isCurrentMonth}
+                      >
+                        {dayObj?.day}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
         </div>
-
+        
         {/* Selected Date Range Display */}
         {selectedStartDate && (
           <div className="w-full mt-[20px] pt-[20px] border-t border-global-2">

@@ -10,19 +10,19 @@ const Dashboard = () => {
   const [activeItem, setActiveItem] = useState('Dashboard');
 
   const menuItems = [
-    { icon: '/images/img_apps.svg', label: 'Dashboard', active: true },
-    { icon: '/images/img_people.svg', label: 'All Employees', active: false },
-    { icon: '/images/img_cloud_change.svg', label: 'All Departments', active: false },
-    { icon: '/images/img_calendar.svg', label: 'Attendance', active: false },
-    { icon: '/images/img_dollar_circle.svg', label: 'Payroll', active: false },
-    { icon: '/images/img_bag_2.svg', label: 'Jobs', active: false },
-    { icon: '/images/img_profile_2user.svg', label: 'Candidates', active: false },
-    { icon: '/images/img_document.svg', label: 'Leaves', active: false },
-    { icon: '/images/img_clipboard_tick.svg', label: 'Holiday', active: false },
-    { icon: '/images/img_setting.svg', label: 'Settings', active: false },
+    { icon: '/images/img_apps.svg', label: 'Dashboard'},
+    { icon: '/images/img_people.svg', label: 'All Employees'},
+    { icon: '/images/img_cloud_change.svg', label: 'All Departments'},
+    { icon: '/images/img_calendar.svg', label: 'Attendance'},
+    { icon: '/images/img_dollar_circle.svg', label: 'Payroll'},
+    { icon: '/images/img_bag_2.svg', label: 'Jobs'},
+    { icon: '/images/img_profile_2user.svg', label: 'Candidates'},
+    { icon: '/images/img_document.svg', label: 'Leaves'},
+    { icon: '/images/img_clipboard_tick.svg', label: 'Holiday'},
+    { icon: '/images/img_setting.svg', label: 'Settings'},
   ];
 
-  const calendarDays = [
+  const calendarDays = [  
     { day: 31, isCurrentMonth: false },
     { day: 1, isCurrentMonth: true, isSelected: true },
     { day: 2, isCurrentMonth: true },
